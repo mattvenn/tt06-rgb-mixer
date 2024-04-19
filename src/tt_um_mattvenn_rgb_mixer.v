@@ -17,9 +17,15 @@ module tt_um_mattvenn_rgb_mixer (
 );
 
     wire rst = ! rst_n;
-    assign uio_oe = 8'b0000_0000;
-    assign uio_out = 8'b0000_0000;
+    assign uio_oe = 8'b1111_1111;
     assign uo_out[7:3] = 5'b0_0000;
+    wire [7:0] enc0, enc1, enc2;
+
+    wire [1:0] debug_enc = ui_in[7:6];
+    assign uio_out = debug_enc == 0 ? enc0 :
+                     debug_enc == 1 ? enc1 :
+                     debug_enc == 2 ? enc2 :
+                     0;
 
     rgb_mixer rgb_mixer (
         .clk(clk),
@@ -32,7 +38,11 @@ module tt_um_mattvenn_rgb_mixer (
         .enc2_b(ui_in[5]),
         .pwm0_out(uo_out[0]),
         .pwm1_out(uo_out[1]),
-        .pwm2_out(uo_out[2])
+        .pwm2_out(uo_out[2]),
+        // debug
+        .enc0(enc0),
+        .enc1(enc1),
+        .enc2(enc2)
     );
 
 endmodule

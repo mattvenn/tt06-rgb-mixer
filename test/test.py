@@ -19,13 +19,15 @@ async def reset(dut):
     dut.rst_n.value = 1;
     await ClockCycles(dut.clk, 5) # how long to wait for the debouncers to clear
 
-async def run_encoder_test(encoder, max_count):
+async def run_encoder_test(dut, encoder, max_count):
     for i in range(clocks_per_phase * 2 * max_count):
         await encoder.update(1)
 
     # let noisy transition finish, otherwise can get an extra count
     for i in range(10):
         await encoder.update(0)
+
+    assert(dut.debug_enc == max_count)
 
 @cocotb.test()
 async def test_all(dut):
@@ -45,9 +47,12 @@ async def test_all(dut):
 
     # do 3 ramps for each encoder 
     max_count = 255
-    await run_encoder_test(encoder0,  max_count)
-    await run_encoder_test(encoder1,  max_count)
-    await run_encoder_test(encoder2,  max_count)
+    dut.debug_mode.value = 0
+    await run_encoder_test(dut, encoder0,  max_count)
+    dut.debug_mode.value = 1
+    await run_encoder_test(dut, encoder1,  max_count)
+    dut.debug_mode.value = 2
+    await run_encoder_test(dut, encoder2,  max_count)
 
     # sync to pwm
     await RisingEdge(dut.pwm0_out)
@@ -58,3 +63,4 @@ async def test_all(dut):
         assert dut.pwm1_out == 1
         assert dut.pwm2_out == 1
         await ClockCycles(dut.clk, 1)
+

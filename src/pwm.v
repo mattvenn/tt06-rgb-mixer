@@ -1,5 +1,4 @@
 `default_nettype none
-`timescale 1ns/1ns
 module pwm #(
     parameter WIDTH = 8,
     parameter INVERT = 0

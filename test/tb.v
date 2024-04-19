@@ -18,6 +18,7 @@ module tb ();
   reg ena;
   reg [7:0] uio_in;
   wire [7:0] uio_out;
+  wire [1:0] debug_mode;
   wire [7:0] uo_out;
   wire [7:0] uio_oe;
 
@@ -26,6 +27,7 @@ module tb ();
   assign pwm2_out = uo_out[2];
   assign pwm1_out = uo_out[1];
   assign pwm0_out = uo_out[0];
+  wire [7:0] debug_enc = uio_out;
 
   // Replace tt_um_example with your module name:
   tt_um_mattvenn_rgb_mixer tt_um_mattvenn_rgb_mixer (
@@ -36,7 +38,7 @@ module tb ();
       .VGND(1'b0),
 `endif
 
-      .ui_in  ({2'b0, enc2_b, enc2_a, enc1_b, enc1_a, enc0_b, enc0_a}),    // Dedicated inputs
+      .ui_in  ({debug_mode, enc2_b, enc2_a, enc1_b, enc1_a, enc0_b, enc0_a}),    // Dedicated inputs
       .uo_out (uo_out),   // Dedicated outputs
       .uio_in (uio_in),   // IOs: Input path
       .uio_out(uio_out),  // IOs: Output path

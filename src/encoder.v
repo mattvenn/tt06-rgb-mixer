@@ -1,5 +1,4 @@
 `default_nettype none
-`timescale 1ns/1ns
 module encoder #(
     parameter WIDTH = 8,
     parameter INCREMENT = 1'b1

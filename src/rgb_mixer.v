@@ -1,22 +1,23 @@
 `default_nettype none
-`timescale 1ns/1ns
 module rgb_mixer (
-    input clk,
-    input reset,
-    input enc0_a,
-    input enc0_b,
-    input enc1_a,
-    input enc1_b,
-    input enc2_a,
-    input enc2_b,
-    output pwm0_out,
-    output pwm1_out,
-    output pwm2_out
+    input wire clk,
+    input wire reset,
+    input wire enc0_a,
+    input wire enc0_b,
+    input wire enc1_a,
+    input wire enc1_b,
+    input wire enc2_a,
+    input wire enc2_b,
+    output wire pwm0_out,
+    output wire pwm1_out,
+    output wire pwm2_out,
+    output wire [7:0] enc0,
+    output wire [7:0] enc1,
+    output wire [7:0] enc2
 );
     wire enc0_a_db, enc0_b_db;
     wire enc1_a_db, enc1_b_db;
     wire enc2_a_db, enc2_b_db;
-    wire [7:0] enc0, enc1, enc2;
 
     // debouncers, 2 for each encoder
     debounce #(.HIST_LEN(8)) debounce0_a(.clk(clk), .reset(reset), .button(enc0_a), .debounced(enc0_a_db));
